@@ -1,4 +1,8 @@
 transformers
-torch  # If using PyTorch-based models
-scikit-learn  # If using ML models
-pandas  # If processing datasets
+torch
+scikit-learn
+pandas
+streamlit
+requests
+numpy
+nltk

@@ -1,0 +1,4 @@
+transformers
+torch  # If using PyTorch-based models
+scikit-learn  # If using ML models
+pandas  # If processing datasets

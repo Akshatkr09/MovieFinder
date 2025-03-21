@@ -1,8 +1,7 @@
+streamlit
 transformers
-torch
+requests
 scikit-learn
 pandas
-streamlit
-requests
-numpy
-nltk
+spacy
+pickle5

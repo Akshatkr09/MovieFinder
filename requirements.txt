@@ -1,8 +1,6 @@
-streamlit
-transformers
-requests
-scikit-learn
-pandas
-spacy
-pickle5
-
+streamlit==1.20.0  # Replace with the latest version if needed
+requests==2.28.1
+pandas==1.5.3
+spacy==3.5.0
+transformers==4.30.0
+scikit-learn==1.2.0

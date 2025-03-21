@@ -1,4 +1,3 @@
-import streamlit as st  
 import os  
 import nltk  
 import requests  
@@ -10,26 +9,26 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer  
 from sklearn.linear_model import LogisticRegression  
 from sklearn.pipeline import Pipeline  
+import streamlit as st  
 
 # Ensure NLTK data directory is created and added to the path  
 nltk_data_path = os.path.join(os.getcwd(), "nltk_data")  
 os.makedirs(nltk_data_path, exist_ok=True)  
 nltk.data.path.append(nltk_data_path)  
 
-# Function to download necessary NLTK resources  
 def download_nltk_resources():  
     """Download required NLTK resources."""  
     try:  
         nltk.data.find("tokenizers/punkt")  
     except LookupError:  
         nltk.download("punkt", download_dir=nltk_data_path)  
-
+        
     try:  
         nltk.data.find("corpora/stopwords")  
     except LookupError:  
         nltk.download("stopwords", download_dir=nltk_data_path)  
 
-# Download NLTK resources  
+# Call this function at the beginning of your Streamlit script before using NLTK  
 download_nltk_resources()  
 
 # Load sentiment analysis model  

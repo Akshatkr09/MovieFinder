@@ -5,4 +5,4 @@ scikit-learn
 pandas
 spacy
 pickle5
-spacy[en_core_web_sm]
+

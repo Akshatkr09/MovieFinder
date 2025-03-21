@@ -1,18 +1,24 @@
 import streamlit as st
 import os
-import spacy
 import requests
 import pickle
 import pandas as pd
+import spacy
 from transformers import pipeline
+from spacy.lang.en.stop_words import STOP_WORDS
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+import subprocess
 
-# Load spaCy English model
-nlp = spacy.load("en_core_web_sm")
+# Ensure spaCy model is available
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
 
-# Load sentiment analysis model from transformers
+# Load sentiment analysis model
 sentiment_pipeline = pipeline("sentiment-analysis")
 
 # TMDb API Key (Replace with your own)
@@ -26,9 +32,9 @@ def extract_mood(prompt):
 
 # Function to extract keywords using spaCy
 def extract_keywords(prompt):
-    """Extracts keywords to determine genre and meaning"""
+    """Extracts keywords from user input using spaCy"""
     doc = nlp(prompt.lower())
-    keywords = [token.text for token in doc if token.is_alpha and not token.is_stop]
+    keywords = [token.text for token in doc if token.is_alpha and token.text not in STOP_WORDS]
     return keywords
 
 # Function to fetch movies by genre from TMDb API

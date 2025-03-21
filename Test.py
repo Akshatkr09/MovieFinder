@@ -3,6 +3,15 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
+nltk.download('punkt')  # Download sentence tokenizer
+
+from nltk.tokenize import word_tokenize
+
+def extract_keywords(prompt):
+    words = word_tokenize(prompt.lower())  # Now this should work without issues
+    return words
+
+
 nltk.download("punkt")
 nltk.download("stopwords")
 

@@ -24,7 +24,7 @@ nltk.download("stopwords", download_dir=nltk_data_path)
 sentiment_pipeline = pipeline("sentiment-analysis")
 
 # TMDb API Key (Replace with your own)
-API_KEY = "your_tmdb_api_key"
+API_KEY = "5fec0affb3191a8e860dd4017044c0f8"
 
 # Function to extract mood using sentiment analysis
 def extract_mood(prompt):

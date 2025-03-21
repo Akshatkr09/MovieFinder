@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 import requests
-import pickle
 import pandas as pd
 import spacy
 from transformers import pipeline
@@ -9,20 +8,15 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
-import subprocess
 
 # Ensure spaCy model is available
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
-    nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_sm")
 
 # Load sentiment analysis model
 sentiment_pipeline = pipeline("sentiment-analysis")
 
-# TMDb API Key (Replace with your own)
-API_KEY = "5fec0affb3191a8e860dd4017044c0f8"
+# TMDb API Key
+API_KEY = "5fec0affb3191a8e860dd4017044c0f8"  # Your provided API key
 
 # Function to extract mood using sentiment analysis
 def extract_mood(prompt):
@@ -47,9 +41,9 @@ def get_movies_by_genre(genre):
         return movies[:10]
     return []
 
-# Train and save a simple genre classification model
+# Train a simple genre classification model in memory
 def train_genre_classifier():
-    """Trains and saves a simple text classification model"""
+    """Trains and returns a simple text classification model"""
     data = {
         "prompt": ["I want a scary horror movie", "A fun animated movie", "A thrilling action-packed film"],
         "genre": ["Horror", "Animation", "Action"]
@@ -57,24 +51,20 @@ def train_genre_classifier():
     df = pd.DataFrame(data)
     X = df["prompt"]
     y = df["genre"]
-    pipeline = Pipeline([
+    model_pipeline = Pipeline([
         ("tfidf", TfidfVectorizer()),
         ("clf", LogisticRegression())
     ])
-    pipeline.fit(X, y)
-    with open("genre_model.pkl", "wb") as f:
-        pickle.dump(pipeline, f)
+    model_pipeline.fit(X, y)
+    return model_pipeline
+
+# Load the genre classifier model into memory
+genre_classifier = train_genre_classifier()
 
 # Function to predict genre using trained model
 def predict_genre(prompt):
     """Predicts genre from user input"""
-    with open("genre_model.pkl", "rb") as f:
-        model = pickle.load(f)
-    return model.predict([prompt])[0]
-
-# Train model if not present
-if not os.path.exists("genre_model.pkl"):
-    train_genre_classifier()
+    return genre_classifier.predict([prompt])[0]
 
 # Streamlit UI
 st.title("🎬 Movie Recommendation System")

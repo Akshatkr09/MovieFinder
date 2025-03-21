@@ -11,14 +11,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 
-# Ensure nltk data directory
+# Ensure NLTK data directory is created and added to the path
 nltk_data_path = os.path.join(os.getcwd(), "nltk_data")
 os.makedirs(nltk_data_path, exist_ok=True)
 nltk.data.path.append(nltk_data_path)
 
-# Download necessary NLTK resources
-nltk.download("punkt", download_dir=nltk_data_path)
-nltk.download("stopwords", download_dir=nltk_data_path)
+# Force-download necessary NLTK resources
+try:
+    nltk.data.find("tokenizers/punkt")
+except LookupError:
+    nltk.download("punkt", download_dir=nltk_data_path)
+
+try:
+    nltk.data.find("corpora/stopwords")
+except LookupError:
+    nltk.download("stopwords", download_dir=nltk_data_path)
 
 # Load sentiment analysis model
 sentiment_pipeline = pipeline("sentiment-analysis")
@@ -35,8 +42,12 @@ def extract_mood(prompt):
 # Function to extract keywords from user input
 def extract_keywords(prompt):
     """Extracts keywords to determine genre and meaning"""
+    nltk.download("punkt", quiet=True)  # Ensure 'punkt' is available
+    nltk.download("stopwords", quiet=True)  # Ensure 'stopwords' is available
+
     words = word_tokenize(prompt.lower())
-    filtered_words = [word for word in words if word.isalnum() and word not in stopwords.words("english")]
+    stop_words = set(stopwords.words("english"))
+    filtered_words = [word for word in words if word.isalnum() and word not in stop_words]
     return filtered_words
 
 # Function to fetch movies by genre from TMDb API

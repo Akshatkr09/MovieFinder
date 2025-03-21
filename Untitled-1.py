@@ -1,4 +1,3 @@
-# %%
 from transformers import pipeline
 import nltk
 from nltk.corpus import stopwords
